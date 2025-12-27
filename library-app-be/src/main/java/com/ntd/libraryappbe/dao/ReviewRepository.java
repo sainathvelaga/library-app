@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+import java.util.Optional;
 
 public interface ReviewRepository extends JpaRepository<Review, Long> {
 
@@ -14,7 +15,10 @@ public interface ReviewRepository extends JpaRepository<Review, Long> {
     Page<Review> findByBookId(Long bookId, Pageable pageable);
 
     // Check if a user has already reviewed a book
-    Review findByUserEmailAndBookId(String userEmail, Long bookId);
+    
+
+    Optional<Review> findByUserEmailAndBookId(String email, Long bookId);
+
 
     // Delete all reviews for a book
     @Modifying
