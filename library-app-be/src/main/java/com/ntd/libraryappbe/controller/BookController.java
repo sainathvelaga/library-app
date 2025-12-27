@@ -4,9 +4,10 @@ import com.ntd.libraryappbe.entity.Book;
 import com.ntd.libraryappbe.responsemodels.ShelfCurrentLoansResponse;
 import com.ntd.libraryappbe.service.BookService;
 import com.ntd.libraryappbe.utils.ExtractJWT;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiParam;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 

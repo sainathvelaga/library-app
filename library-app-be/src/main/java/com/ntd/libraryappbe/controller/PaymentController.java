@@ -4,9 +4,10 @@ import com.ntd.libraryappbe.requestmodels.PaymentInfoRequest;
 import com.ntd.libraryappbe.service.PaymentService;
 import com.ntd.libraryappbe.utils.ExtractJWT;
 import com.stripe.model.PaymentIntent;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiParam;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

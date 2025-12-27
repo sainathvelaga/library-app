@@ -3,9 +3,10 @@ package com.ntd.libraryappbe.controller;
 import com.ntd.libraryappbe.requestmodels.ReviewRequest;
 import com.ntd.libraryappbe.service.ReviewService;
 import com.ntd.libraryappbe.utils.ExtractJWT;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiParam;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+
 import org.springframework.web.bind.annotation.*;
 
 @CrossOrigin(origins = "https://localhost:3000")
