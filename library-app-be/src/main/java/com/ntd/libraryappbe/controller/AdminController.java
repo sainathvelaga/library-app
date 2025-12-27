@@ -3,14 +3,19 @@ package com.ntd.libraryappbe.controller;
 import com.ntd.libraryappbe.requestmodels.AddBookRequest;
 import com.ntd.libraryappbe.service.AdminService;
 import com.ntd.libraryappbe.utils.ExtractJWT;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 @CrossOrigin(origins = "https://localhost:3000")
 @RestController
 @RequestMapping("/api/admin")
+@Api(tags = "Admin API")
 public class AdminController {
-    private AdminService adminService;
+
+    private final AdminService adminService;
 
     @Autowired
     public AdminController(AdminService adminService) {
@@ -18,8 +23,15 @@ public class AdminController {
     }
 
     @PutMapping("/secure/increase/book/quantity")
-    public void increaseBookQuantity(@RequestHeader("Authorization") String token,
-                                     @RequestParam("bookId") Long bookId) throws Exception {
+    @ApiOperation("Increase quantity of a book (Admin only)")
+    public void increaseBookQuantity(
+            @ApiParam(value = "JWT Authorization token", required = true)
+            @RequestHeader("Authorization") String token,
+
+            @ApiParam(value = "Book ID", required = true)
+            @RequestParam("bookId") Long bookId
+    ) throws Exception {
+
         String admin = ExtractJWT.payloadJWTExtraction(token, "\"userType\"");
         if (admin == null || !admin.equals("admin")) {
             throw new Exception("Administration page only!");
@@ -28,8 +40,15 @@ public class AdminController {
     }
 
     @PutMapping("/secure/decrease/book/quantity")
-    public void decreaseBookQuantity(@RequestHeader("Authorization") String token,
-                                     @RequestParam("bookId") Long bookId) throws Exception {
+    @ApiOperation("Decrease quantity of a book (Admin only)")
+    public void decreaseBookQuantity(
+            @ApiParam(value = "JWT Authorization token", required = true)
+            @RequestHeader("Authorization") String token,
+
+            @ApiParam(value = "Book ID", required = true)
+            @RequestParam("bookId") Long bookId
+    ) throws Exception {
+
         String admin = ExtractJWT.payloadJWTExtraction(token, "\"userType\"");
         if (admin == null || !admin.equals("admin")) {
             throw new Exception("Administration page only!");
@@ -38,8 +57,15 @@ public class AdminController {
     }
 
     @PostMapping("/secure/add/book")
-    public void postBook(@RequestHeader("Authorization") String token,
-                         @RequestBody AddBookRequest addBookRequest) throws Exception {
+    @ApiOperation("Add a new book to the library (Admin only)")
+    public void postBook(
+            @ApiParam(value = "JWT Authorization token", required = true)
+            @RequestHeader("Authorization") String token,
+
+            @ApiParam(value = "Book details", required = true)
+            @RequestBody AddBookRequest addBookRequest
+    ) throws Exception {
+
         String admin = ExtractJWT.payloadJWTExtraction(token, "\"userType\"");
         if (admin == null || !admin.equals("admin")) {
             throw new Exception("Administration page only!");
@@ -48,8 +74,15 @@ public class AdminController {
     }
 
     @DeleteMapping("/secure/delete/book")
-    public void deleteBook(@RequestHeader("Authorization") String token,
-                           @RequestParam("bookId") Long bookId) throws Exception {
+    @ApiOperation("Delete a book from the library (Admin only)")
+    public void deleteBook(
+            @ApiParam(value = "JWT Authorization token", required = true)
+            @RequestHeader("Authorization") String token,
+
+            @ApiParam(value = "Book ID", required = true)
+            @RequestParam("bookId") Long bookId
+    ) throws Exception {
+
         String admin = ExtractJWT.payloadJWTExtraction(token, "\"userType\"");
         if (admin == null || !admin.equals("admin")) {
             throw new Exception("Administration page only!");
