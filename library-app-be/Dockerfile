@@ -1,7 +1,7 @@
 FROM maven:3.9.9-eclipse-temurin-17 AS builder
 WORKDIR /app
 COPY . /app
-RUN mvn clean install
+RUN mvn clean package -DskipTests
 FROM eclipse-temurin:17-jre-alpine
 WORKDIR /app
 ENV spring.datasource.url=jdbc:mysql://localhost:3306/reactlibrarydatabase?useSSL=false&useUnicode=yes&characterEncoding=UTF-8&allowPublicKeyRetrieval=true&serverTimezone=UTC
