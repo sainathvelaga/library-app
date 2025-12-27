@@ -1,20 +1,6 @@
-package com.ntd.libraryappbe.controller;
-
-import com.ntd.libraryappbe.entity.Message;
-import com.ntd.libraryappbe.requestmodels.AdminQuestionRequest;
-import com.ntd.libraryappbe.service.MessageService;
-import com.ntd.libraryappbe.utils.ExtractJWT;
-import io.swagger.v3.oas.annotations.tags.Tag;
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.Parameter;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
-
-@CrossOrigin(origins = "https://localhost:3000")
+@Tag(name = "Messages API")
 @RestController
 @RequestMapping("api/messages")
-@Api(tags = "Messages API")
 public class MessageController {
 
     private final MessageService messageService;
@@ -24,37 +10,27 @@ public class MessageController {
         this.messageService = messageService;
     }
 
+    @Operation(summary = "Post a message (User)")
     @PostMapping("/secure/add/message")
-    @ApiOperation("Post a new message or question (User)")
     public void postMessage(
-            @ApiParam(value = "JWT Authorization token", required = true)
+            @Parameter(description = "JWT Authorization token", required = true)
             @RequestHeader("Authorization") String token,
-
-            @ApiParam(value = "Message payload", required = true)
-            @RequestBody Message messageRequest
-    ) {
+            @RequestBody Message messageRequest) {
 
         String userEmail = ExtractJWT.payloadJWTExtraction(token, "\"sub\"");
         messageService.postMessage(messageRequest, userEmail);
     }
 
+    @Operation(summary = "Reply to message (Admin only)")
     @PutMapping("/secure/admin/message")
-    @ApiOperation("Reply to a user message (Admin only)")
     public void putMessage(
-            @ApiParam(value = "JWT Authorization token", required = true)
+            @Parameter(description = "JWT Authorization token", required = true)
             @RequestHeader("Authorization") String token,
+            @RequestBody AdminQuestionRequest adminQuestionRequest) throws Exception {
 
-            @ApiParam(value = "Admin response payload", required = true)
-            @RequestBody AdminQuestionRequest adminQuestionRequest
-    ) throws Exception {
-
-        String userEmail = ExtractJWT.payloadJWTExtraction(token, "\"sub\"");
         String role = ExtractJWT.payloadJWTExtraction(token, "\"userType\"");
-
-        if (role == null || !role.equals("admin")) {
-            throw new Exception("Administration page only.");
-        }
-
-        messageService.putMessage(adminQuestionRequest, userEmail);
+        if (!"admin".equals(role)) throw new Exception("Administration page only.");
+        messageService.putMessage(adminQuestionRequest,
+                ExtractJWT.payloadJWTExtraction(token, "\"sub\""));
     }
 }
