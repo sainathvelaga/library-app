@@ -1,4 +1,4 @@
-FROM openjdk:17-alpine as builder
+FROM openjdk:17-alpine AS builder
 WORKDIR /app
 RUN mvn clean install
 COPY . /app
