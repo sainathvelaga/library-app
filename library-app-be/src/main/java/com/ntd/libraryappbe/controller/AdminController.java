@@ -3,16 +3,16 @@ package com.ntd.libraryappbe.controller;
 import com.ntd.libraryappbe.requestmodels.AddBookRequest;
 import com.ntd.libraryappbe.service.AdminService;
 import com.ntd.libraryappbe.utils.ExtractJWT;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiParam;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 @CrossOrigin(origins = "https://localhost:3000")
 @RestController
 @RequestMapping("/api/admin")
-@Api(tags = "Admin API")
+@Tag(name = "Admin API")
 public class AdminController {
 
     private final AdminService adminService;
@@ -22,71 +22,54 @@ public class AdminController {
         this.adminService = adminService;
     }
 
+    @Operation(summary = "Increase book quantity (Admin only)")
     @PutMapping("/secure/increase/book/quantity")
-    @ApiOperation("Increase quantity of a book (Admin only)")
     public void increaseBookQuantity(
-            @ApiParam(value = "JWT Authorization token", required = true)
+            @Parameter(description = "JWT Authorization token", required = true)
             @RequestHeader("Authorization") String token,
+            @Parameter(description = "Book ID", required = true)
+            @RequestParam Long bookId) throws Exception {
 
-            @ApiParam(value = "Book ID", required = true)
-            @RequestParam("bookId") Long bookId
-    ) throws Exception {
-
-        String admin = ExtractJWT.payloadJWTExtraction(token, "\"userType\"");
-        if (admin == null || !admin.equals("admin")) {
-            throw new Exception("Administration page only!");
-        }
+        String role = ExtractJWT.payloadJWTExtraction(token, "\"userType\"");
+        if (!"admin".equals(role)) throw new Exception("Administration page only!");
         adminService.increaseBookQuantity(bookId);
     }
 
+    @Operation(summary = "Decrease book quantity (Admin only)")
     @PutMapping("/secure/decrease/book/quantity")
-    @ApiOperation("Decrease quantity of a book (Admin only)")
     public void decreaseBookQuantity(
-            @ApiParam(value = "JWT Authorization token", required = true)
+            @Parameter(description = "JWT Authorization token", required = true)
             @RequestHeader("Authorization") String token,
+            @Parameter(description = "Book ID", required = true)
+            @RequestParam Long bookId) throws Exception {
 
-            @ApiParam(value = "Book ID", required = true)
-            @RequestParam("bookId") Long bookId
-    ) throws Exception {
-
-        String admin = ExtractJWT.payloadJWTExtraction(token, "\"userType\"");
-        if (admin == null || !admin.equals("admin")) {
-            throw new Exception("Administration page only!");
-        }
+        String role = ExtractJWT.payloadJWTExtraction(token, "\"userType\"");
+        if (!"admin".equals(role)) throw new Exception("Administration page only!");
         adminService.decreaseBookQuantity(bookId);
     }
 
+    @Operation(summary = "Add a new book (Admin only)")
     @PostMapping("/secure/add/book")
-    @ApiOperation("Add a new book to the library (Admin only)")
     public void postBook(
-            @ApiParam(value = "JWT Authorization token", required = true)
+            @Parameter(description = "JWT Authorization token", required = true)
             @RequestHeader("Authorization") String token,
+            @RequestBody AddBookRequest addBookRequest) throws Exception {
 
-            @ApiParam(value = "Book details", required = true)
-            @RequestBody AddBookRequest addBookRequest
-    ) throws Exception {
-
-        String admin = ExtractJWT.payloadJWTExtraction(token, "\"userType\"");
-        if (admin == null || !admin.equals("admin")) {
-            throw new Exception("Administration page only!");
-        }
+        String role = ExtractJWT.payloadJWTExtraction(token, "\"userType\"");
+        if (!"admin".equals(role)) throw new Exception("Administration page only!");
         adminService.postBook(addBookRequest);
     }
 
+    @Operation(summary = "Delete a book (Admin only)")
     @DeleteMapping("/secure/delete/book")
-    @ApiOperation("Delete a book from the library (Admin only)")
     public void deleteBook(
-            @ApiParam(value = "JWT Authorization token", required = true)
+            @Parameter(description = "JWT Authorization token", required = true)
             @RequestHeader("Authorization") String token,
+            @Parameter(description = "Book ID", required = true)
+            @RequestParam Long bookId) throws Exception {
 
-            @ApiParam(value = "Book ID", required = true)
-            @RequestParam("bookId") Long bookId
-    ) throws Exception {
-
-        String admin = ExtractJWT.payloadJWTExtraction(token, "\"userType\"");
-        if (admin == null || !admin.equals("admin")) {
-            throw new Exception("Administration page only!");
-        }
+        String role = ExtractJWT.payloadJWTExtraction(token, "\"userType\"");
+        if (!"admin".equals(role)) throw new Exception("Administration page only!");
         adminService.deleteBook(bookId);
     }
 }

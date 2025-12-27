@@ -1,18 +1,6 @@
-package com.ntd.libraryappbe.controller;
-
-import com.ntd.libraryappbe.requestmodels.ReviewRequest;
-import com.ntd.libraryappbe.service.ReviewService;
-import com.ntd.libraryappbe.utils.ExtractJWT;
-import io.swagger.v3.oas.annotations.tags.Tag;
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.Parameter;
-
-import org.springframework.web.bind.annotation.*;
-
-@CrossOrigin(origins = "https://localhost:3000")
+@Tag(name = "Reviews API")
 @RestController
-@RequestMapping(path = "api/reviews")
-@Api(tags = "Reviews API")
+@RequestMapping("api/reviews")
 public class ReviewController {
 
     private final ReviewService reviewService;
@@ -21,37 +9,26 @@ public class ReviewController {
         this.reviewService = reviewService;
     }
 
+    @Operation(summary = "Check if user reviewed a book")
     @GetMapping("/secure/user/book")
-    @ApiOperation("Check if the logged-in user has already reviewed a book")
     public boolean reviewBookByUser(
-            @ApiParam(value = "JWT Authorization token", required = true)
-            @RequestHeader(value = "Authorization") String token,
-
-            @ApiParam(value = "Book ID", required = true)
-            @RequestParam Long bookId
-    ) throws Exception {
+            @Parameter(description = "JWT Authorization token", required = true)
+            @RequestHeader("Authorization") String token,
+            @Parameter(description = "Book ID", required = true)
+            @RequestParam Long bookId) throws Exception {
 
         String userEmail = ExtractJWT.payloadJWTExtraction(token, "\"sub\"");
-        if (userEmail == null) {
-            throw new Exception("User email is missing");
-        }
         return reviewService.userReviewListed(userEmail, bookId);
     }
 
+    @Operation(summary = "Post a book review")
     @PostMapping("/secure")
-    @ApiOperation("Submit a review for a book")
     public void postReview(
-            @ApiParam(value = "JWT Authorization token", required = true)
-            @RequestHeader(value = "Authorization") String token,
-
-            @ApiParam(value = "Review details", required = true)
-            @RequestBody ReviewRequest reviewRequest
-    ) throws Exception {
+            @Parameter(description = "JWT Authorization token", required = true)
+            @RequestHeader("Authorization") String token,
+            @RequestBody ReviewRequest reviewRequest) throws Exception {
 
         String userEmail = ExtractJWT.payloadJWTExtraction(token, "\"sub\"");
-        if (userEmail == null) {
-            throw new Exception("User email is missing");
-        }
         reviewService.postReview(userEmail, reviewRequest);
     }
 }
