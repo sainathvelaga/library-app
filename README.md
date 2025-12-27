@@ -50,5 +50,55 @@ Verify the installation with the below command
 mvn --version
 ```
 
-We will now setup the db 
+We will now setup the db from backend server like creating db,tables through mysql client.
+
+```
+ sudo dnf install -y https://dev.mysql.com/get/mysql80-community-release-el9-1.noarch.rpm
+```
+```
+sudo rpm --import https://repo.mysql.com/RPM-GPG-KEY-mysql-2022
+```
+```
+sudo dnf install -y mysql-community-client --nogpgcheck
+```
+
+```
+mysql -h db.sainathdevops.space -u root -p
+```
+
+Enter the password that we have set, i have created a domain and added a DNS record for db server on AWS route53, you can use the ip address directly as well
+
+```
+create database librarydb;
+```
+
+```
+show databases;
+```
+
+```
+use librarydb;
+```
+
+```
+mysql -h db.sainathdevops.space -uroot -pExpenseApp@1 < /mysql/scripts/React-Springboot-Add-Tables-Script-1.sql
+```
+Once the data is loaded, you can install dependencies and run the jar file
+
+```
+mvn clean install
+```
+
+go to target folder and execute jar
+
+```
+java -jar library-app-be-0.0.1-SNAPSHOT.jar
+```
+
+# Front end
+
+curl -fsSL https://rpm.nodesource.com/setup_18.x | sudo bash -
+sudo yum install -y nodejs
+sudo dnf  install nginx -y
+
 
