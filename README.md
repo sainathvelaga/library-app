@@ -50,6 +50,8 @@ Verify the installation with the below command
 mvn --version
 ```
 
+
+
 We will now setup the db from backend server like creating db,tables through mysql client.
 
 ```
@@ -81,7 +83,7 @@ use librarydb;
 ```
 
 ```
-mysql -h db.sainathdevops.space -uroot -pExpenseApp@1 < /mysql/scripts/React-Springboot-Add-Tables-Script-1.sql
+mysql -h db.sainathdevops.space -u root -pLibApp@1 < mysql/scripts/React-Springboot-Add-Tables-Script-1.sql
 ```
 Once the data is loaded, you can install dependencies and run the jar file
 
